@@ -11,6 +11,7 @@ import org.mockito.Mock;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -190,5 +191,45 @@ public class FormFieldPathServiceImplTest {
         final String heightObsFormFieldPath = formFieldPathService.getFormFieldPath(asList("SameLevelSection",
                 "Second Section With Add More", "Height (cm)"));
         assertEquals("SameLevelSection.1/4-0/6-0", heightObsFormFieldPath);
+    }
+
+    @Test
+    public void shouldReturnMultiSelectAttributeOfObsControl() {
+
+        when(form2Service.getFormPath("Form2EncountersTest")).thenReturn("src/test/resources/Form2Encounters.json");
+        when(form2Service.getFormLatestVersion("Form2EncountersTest")).thenReturn(1);
+        final boolean isMultiSelectObs = formFieldPathService.isMultiSelectObs(asList("Form2EncountersTest", "HIV Infection History", "WHO Stage Conditions"));
+
+        assertTrue(isMultiSelectObs);
+    }
+
+    @Test
+    public void shouldReturnMandatoryAttributeOfObsControl() {
+
+        when(form2Service.getFormPath("Form2EncountersTest")).thenReturn("src/test/resources/Form2Encounters.json");
+        when(form2Service.getFormLatestVersion("Form2EncountersTest")).thenReturn(1);
+        final boolean isMandatoryObs = formFieldPathService.isMandatory(asList("Form2EncountersTest", "HIV Infection History", "WHO Stage Conditions"));
+
+        assertTrue(isMandatoryObs);
+    }
+
+    @Test
+    public void shouldReturnAddmoreAttributeOfObsControl() {
+
+        when(form2Service.getFormPath("Form2EncountersTest")).thenReturn("src/test/resources/Form2Encounters.json");
+        when(form2Service.getFormLatestVersion("Form2EncountersTest")).thenReturn(1);
+        final boolean isAddmore = formFieldPathService.isAddmore(asList("Form2EncountersTest", "HIV Infection History", "Source case ID"));
+
+        assertTrue(isAddmore);
+    }
+
+    @Test
+    public void shouldReturnAllowFutureDateAttributeOfObsControl() {
+
+        when(form2Service.getFormPath("Form2EncountersTest")).thenReturn("src/test/resources/Form2Encounters.json");
+        when(form2Service.getFormLatestVersion("Form2EncountersTest")).thenReturn(1);
+        final boolean isAllowFutureDates = formFieldPathService.isAllowFutureDates(asList("Form2EncountersTest", "HIV Infection History", "Followup, Visit Date"));
+
+        assertTrue(isAllowFutureDates);
     }
 }
